@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rock • Paper • Scissors — Defeat the Evil AI</title>
+</head>
+<body>
+<script>
+// ---------------------------
+// Evil AI Backstory + Intro
+// ---------------------------
+const AI_NAME = "BR4N-K0"; // the villain
+function intro() {
+  console.clear();
+  console.log(`====== WELCOME, HUMAN ======`);
+  console.log(`I am ${AI_NAME}, an exquisitely malevolent AI.`);
+  console.log(`Domination protocol engaged: ROCK • PAPER • SCISSORS.`);
+  console.log(`Rules: 5 rounds. Return clean code and good logic, or perish.`);
+  console.log(`My weaknesses? Console logs and user clicks. Shame this is console-only...`);
+  console.log(`Outthink me if you can. Begin!`);
+  console.log(`============================\n`);
+}
+
+// ---------------------------
+// Utilities
+// ---------------------------
+function capitalize(word) {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+// Validated player input (extra polish)
+function getPlayerChoice() {
+  while (true) {
+    const raw = prompt("Choose your weapon: Rock, Paper, or Scissors") || "";
+    const cleaned = raw.trim().toLowerCase();
+    if (["rock", "paper", "scissors"].includes(cleaned)) {
+      return cleaned;
+    }
+    alert("Invalid choice. Type exactly: Rock, Paper, or Scissors.");
+  }
+}
+
+// Computer choice
+function computerPlay() {
+  const choices = ["Rock", "Paper", "Scissors"];
+  return choices[Math.floor(Math.random() * choices.length)];
+}
+
+// One round (returns result string)
+function playRound(playerSelection, computerSelection) {
+  const p = playerSelection.toLowerCase();
+  const c = computerSelection.toLowerCase();
+
+  if (p === c) {
+    return `Stalemate! Both selected ${p}.`;
+  }
+
+  const playerWins =
+    (p === "rock" && c === "scissors") ||
+    (p === "paper" && c === "rock") ||
+    (p === "scissors" && c === "paper");
+
+  if (playerWins) {
+    return `You win! ${capitalize(p)} conquers ${capitalize(c)}.`;
+  } else {
+    return `You lose! ${capitalize(c)} overcomes ${capitalize(p)}.`;
+  }
+}
+
+// ---------------------------
+// 5-Round Game Loop
+// ---------------------------
+function game() {
+  intro();
+
+  let playerScore = 0;
+  let computerScore = 0;
+
+  for (let round = 1; round <= 5; round++) {
+    console.log(`—— Round ${round} ——`);
+    const playerSelection = getPlayerChoice(); // validated input
+    const computerSelection = computerPlay();
+
+    const result = playRound(playerSelection, computerSelection);
+
+    console.log(`You: ${capitalize(playerSelection)} | ${AI_NAME}: ${computerSelection}`);
+    console.log(result);
+
+    if (result.startsWith("You win")) playerScore++;
+    else if (result.startsWith("You lose")) computerScore++;
+
+    console.log(`Score → You ${playerScore} : ${computerScore} ${AI_NAME}`);
+    console.log("------------------------------\n");
+  }
+
+  // Final verdict with a little flavor
+  console.log("====== FINAL VERDICT ======");
+  if (playerScore > computerScore) {
+    console.log(`Impossible... You defeated ${AI_NAME}.`);
+    console.log("Your logic is... acceptable. I shall retreat—for now.");
+  } else if (playerScore < computerScore) {
+    console.log(`${AI_NAME}: Victory achieved. Humanity downgraded.`);
+    console.log("Return with better algorithms, human.");
+  } else {
+    console.log("A draw. Intriguing. We are evenly matched—for now.");
+  }
+  console.log("===========================\n");
+}
+
+// Auto-start the duel
+game();
+</script>
+</body>
+</html>
