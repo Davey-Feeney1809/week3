@@ -37,11 +37,11 @@ function computerPlay() {
 
 function playRound(playerSel, aiSel) {
   const p = playerSel.toLowerCase(), c = aiSel.toLowerCase();
-  if (p === c) return { result: "Draw", text: "Draw — both chose " + p + "." };
+  if (p === c) return { result: "Draw", detail: "Draw — both chose " + p + "." };
   const win = (p === "rock" && c === "scissors") || (p === "paper" && c === "rock") || (p === "scissors" && c === "paper");
   return win
-    ? { result: "Win",  text: "You win — " + cap(p) + " beats " + cap(c) + "." }
-    : { result: "Lose", text: "You lose — " + cap(c) + " beats " + cap(p) + "." };
+    ? { result: "Win",  detail: "You win — " + cap(p) + " beats " + cap(c) + "." }
+    : { result: "Lose", detail: "You lose — " + cap(c) + " beats " + cap(p) + "." };
 }
 
 function game() {
@@ -50,44 +50,53 @@ function game() {
   console.log("I am " + AI_NAME + ", an exquisitely malevolent AI.");
   console.log("Protocol: ROCK • PAPER • SCISSORS — 5 rounds.");
   console.log("============================\n");
+
   let you = 0, ai = 0;
 
   for (let round = 1; round <= 5; round++) {
     console.log("— Round " + round + " of 5 —");
+
     const playerSel = getPlayerChoice();
     const aiSel = computerPlay();
-    const outcome = playRound(playerSel, aiSel);
+    const { result, detail } = playRound(playerSel, aiSel);
+
     console.log("You: " + cap(playerSel) + " | " + AI_NAME + ": " + aiSel);
-    console.log(outcome.text);
-    if (outcome.result === "Win") you++; else if (outcome.result === "Lose") ai++;
+    console.log(detail);
+
+    if (result === "Win") you++;
+    else if (result === "Lose") ai++;
+
     console.log("Score → You " + you + " : " + ai + " " + AI_NAME);
     console.log("------------------------------\n");
+
     alert(
       "Round " + round + " of 5\n" +
       "AI chose: " + aiSel + "\n" +
-      "Result: " + outcome.result + "\n" +
+      "Result: " + result + "\n" +
       "Score: You " + you + " – " + ai + " AI"
     );
   }
 
-  let flavor;
+  let finalLines;
   if (you > ai) {
     console.log("Impossible... You defeated " + AI_NAME + ".");
     console.log("Your logic is... acceptable. I shall retreat—for now.");
-    flavor = "Impossible... You defeated " + AI_NAME + ".\nYour logic is... acceptable. I shall retreat—for now.";
+    finalLines = "Impossible... You defeated " + AI_NAME + ".\nYour logic is... acceptable. I shall retreat—for now.";
   } else if (you < ai) {
     console.log(AI_NAME + ": Victory achieved. Humanity downgraded.");
     console.log("Return with better algorithms, human.");
-    flavor = AI_NAME + ": Victory achieved. Humanity downgraded.\nReturn with better algorithms, human.";
+    finalLines = AI_NAME + ": Victory achieved. Humanity downgraded.\nReturn with better algorithms, human.";
   } else {
     console.log("A draw. Intriguing. We are evenly matched—for now.");
-    flavor = "A draw. Intriguing. We are evenly matched—for now.";
+    finalLines = "A draw. Intriguing. We are evenly matched—for now.";
   }
-  return flavor + "\nFinal Score → You " + you + " : " + ai + " " + AI_NAME;
+
+  return finalLines + "\nFinal Score → You " + you + " : " + ai + " " + AI_NAME;
 }
 
 function run() {
   showIntro();
+  if (!confirm("Do you want to play?")) return;
   do {
     const finalText = game();
     alert(finalText);
