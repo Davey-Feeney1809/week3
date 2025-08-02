@@ -1,6 +1,6 @@
 const AI_NAME = "BR4N-K0"; // evil AI
 
-// Intro popups (no confirm here to avoid dialog blocking)
+// Intro popups
 function showIntro() {
   alert(
     `Hello human, I’ve hacked this assignment!\n\n` +
@@ -12,6 +12,8 @@ function showIntro() {
     `• My weaknesses are errors in the console log... not your clicks.\n\n` +
     `Good luck, muuuuhahahahahahaha!`
   );
+
+  // TIP: how to open the console
   alert("Tip: Press F12 (or Ctrl+Shift+I on Windows / Cmd+Opt+I on Mac) and open the Console tab to see round-by-round results.");
 }
 
@@ -35,6 +37,7 @@ function getPlayerChoice() {
     }
     const cleaned = raw.trim().toLowerCase();
     if (["rock", "paper", "scissors"].includes(cleaned)) return cleaned;
+
     const taunt = taunts[Math.floor(Math.random() * taunts.length)];
     alert(taunt);
   }
