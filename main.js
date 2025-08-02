@@ -36,14 +36,14 @@ function getPlayerChoice() {
     const cleaned = raw.trim().toLowerCase();
     if (["rock", "paper", "scissors"].includes(cleaned)) return cleaned;
 
-    // const map = { r: "rock", p: "paper", s: "scissors" };
-    // if (map[cleaned]) return map[cleaned];
+    const map = { r: "rock", p: "paper", s: "scissors" };
+    if (map[cleaned]) return map[cleaned];
 
     alert(taunts[Math.floor(Math.random() * taunts.length)]);
   }
 }
 
-// ---------- Core helpers ----------
+
 function computerPlay() {
   const choices = ["Rock", "Paper", "Scissors"];
   return choices[Math.floor(Math.random() * choices.length)];
@@ -140,3 +140,4 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("startBtn");
   btn.addEventListener("click", () => startGameFlow(btn));
 });
+
