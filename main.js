@@ -18,6 +18,7 @@ function showIntro() {
   );
 }
 
+
 function getPlayerChoice() {
   const taunts = [
     `${AI_NAME}: That input was… adorable. Try Rock, Paper, or Scissors.`,
@@ -26,6 +27,7 @@ function getPlayerChoice() {
     `${AI_NAME}: I can predict everything except *that*. Use Rock, Paper, or Scissors.`,
     `${AI_NAME}: Error 418: Not a valid weapon. Rock, Paper, or Scissors only.`
   ];
+  const map = { r: "rock", p: "paper", s: "scissors" };
 
   while (true) {
     const raw = prompt("Choose your weapon: Rock, Paper, or Scissors");
@@ -33,11 +35,12 @@ function getPlayerChoice() {
       alert(`${AI_NAME}: Retreat detected. Face your destiny and choose!`);
       continue;
     }
-    const cleaned = raw.trim().toLowerCase();
-    if (["rock", "paper", "scissors"].includes(cleaned)) return cleaned;
 
-    const map = { r: "rock", p: "paper", s: "scissors" };
-    if (map[cleaned]) return map[cleaned];
+    
+    const lettersOnly = raw.toLowerCase().replace(/[^a-z]/g, "");
+    const normalized = map[lettersOnly] || lettersOnly; // r/p/s shortcuts
+
+    if (["rock", "paper", "scissors"].includes(normalized)) return normalized;
 
     alert(taunts[Math.floor(Math.random() * taunts.length)]);
   }
@@ -63,7 +66,6 @@ function playRound(playerSelection, computerSelection) {
     ? { result: "Win",  text: `You win — ${cap(p)} beats ${cap(c)}.` }
     : { result: "Lose", text: `You lose — ${cap(c)} beats ${cap(p)}.` };
 }
-
 
 function game() {
   console.clear();
@@ -92,7 +94,7 @@ function game() {
     log(`Score → You ${player} : ${ai} ${AI_NAME}`);
     log(`------------------------------\n`);
 
-    
+  
     alert(
       `Round ${round} of 5\n` +
       `AI chose: ${aiSel}\n` +
@@ -101,7 +103,7 @@ function game() {
     );
   }
 
- 
+  
   let flavor = "";
   if (player > ai) {
     log(`Impossible... You defeated ${AI_NAME}.`);
@@ -129,7 +131,7 @@ function startGameFlow(button) {
     do {
       const { finalText } = game();
       alert(finalText);                 
-    } while (confirm("Play again?"));   
+    } while (confirm("Play again?"));  
   } finally {
     button.disabled = false;
     button.textContent = "Play Again";
@@ -140,4 +142,3 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("startBtn");
   btn.addEventListener("click", () => startGameFlow(btn));
 });
-
