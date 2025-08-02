@@ -12,18 +12,35 @@ function showIntro() {
     `• My weaknesses are errors in the console log... not your clicks.\n\n` +
     `Good luck, muuuuhahahahahahaha!`
   );
+  alert("Tip: Press F12 (or Ctrl+Shift+I on Windows / Cmd+Opt+I on Mac) and open the Console tab to see round-by-round results.");
   return confirm("Do you dare to face me?");
 }
 
 function capitalize(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
 
-// Validated player input (loops until valid)
+// Validated player input with EVIL AI taunts on bad input
 function getPlayerChoice() {
+  const taunts = [
+    `${AI_NAME}: That input was… adorable. Try Rock, Paper, or Scissors.`,
+    `${AI_NAME}: Nice try, meatbag. Only Rock, Paper, or Scissors are allowed.`,
+    `${AI_NAME}: Processing… nonsense detected. Choose Rock, Paper, or Scissors.`,
+    `${AI_NAME}: I can predict everything except *that*. Use Rock, Paper, or Scissors.`,
+    `${AI_NAME}: Error 418: Not a valid weapon. Rock, Paper, or Scissors only.`
+  ];
+
   while (true) {
-    const raw = prompt("Choose your weapon: Rock, Paper, or Scissors") || "";
+    const raw = prompt("Choose your weapon: Rock, Paper, or Scissors");
+    // If user hits Cancel, keep them in the loop with a playful nudge
+    if (raw === null) {
+      alert(`${AI_NAME}: Retreat detected. Face your destiny and choose!`);
+      continue;
+    }
+
     const cleaned = raw.trim().toLowerCase();
     if (["rock", "paper", "scissors"].includes(cleaned)) return cleaned;
-    alert("Invalid choice. Type exactly: Rock, Paper, or Scissors.");
+
+    const taunt = taunts[Math.floor(Math.random() * taunts.length)];
+    alert(`${taunt}`);
   }
 }
 
@@ -103,5 +120,3 @@ function game() {
     alert("You have fled... The AI wins by default.");
   }
 })();
-
-
