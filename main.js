@@ -1,13 +1,13 @@
 const AI_NAME = "BR4N-K0"; // evil AI
 
-// ---------- Simple on-page + console logging ----------
+
 function getLogEl() { return document.getElementById("logs"); }
 function logToPage(msg) { getLogEl().textContent += msg + "\n"; }
 function log(msg) { console.log(msg); logToPage(msg); }
 function clearLogs() { getLogEl().textContent = ""; }
 function capitalize(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
 
-// ---------- Opening message (includes tip for console) ----------
+
 function showIntro() {
   alert(
     `Hello human, I’ve hacked this assignment!\n\n` +
@@ -21,7 +21,7 @@ function showIntro() {
   );
 }
 
-// ---------- Input (with friendly/funny taunts on invalid) ----------
+
 function getPlayerChoice() {
   const taunts = [
     `${AI_NAME}: That input was… adorable. Try Rock, Paper, or Scissors.`,
@@ -33,7 +33,7 @@ function getPlayerChoice() {
 
   while (true) {
     const raw = prompt("Choose your weapon: Rock, Paper, or Scissors");
-    if (raw === null) { // user pressed Cancel
+    if (raw === null) { 
       alert(`${AI_NAME}: Retreat detected. Face your destiny and choose!`);
       continue;
     }
@@ -43,7 +43,7 @@ function getPlayerChoice() {
   }
 }
 
-// ---------- Core game helpers ----------
+
 function computerPlay() {
   const choices = ["Rock", "Paper", "Scissors"];
   return choices[Math.floor(Math.random() * choices.length)];
@@ -62,7 +62,7 @@ function playRound(playerSelection, computerSelection) {
     : `You lose! ${capitalize(c)} overcomes ${capitalize(p)}.`;
 }
 
-// ---------- One 5-round match; returns final message ----------
+
 function game() {
   console.clear();
   clearLogs();
@@ -90,7 +90,7 @@ function game() {
     log(`Score → You ${playerScore} : ${computerScore} ${AI_NAME}`);
     log("------------------------------\n");
 
-    // Per-round popup with AI choice + current score
+  
     alert(
       `Round ${round}\n` +
       `You: ${capitalize(playerSelection)} | ${AI_NAME}: ${computerSelection}\n` +
@@ -116,16 +116,16 @@ function game() {
   return `${finalMsg}\nFinal Score → You ${playerScore} : ${computerScore} ${AI_NAME}`;
 }
 
-// ---------- Start on user click (Opera/Brave friendly) ----------
+
 function startGameFlow(button) {
   button.disabled = true;
   button.textContent = "Game in progress…";
   try {
-    showIntro(); // intro + console tip
+    showIntro(); 
     do {
       const finalMessage = game();
       alert(finalMessage); // final popup
-    } while (confirm("Play again?"));    // OK = replay, Cancel = stop
+    } while (confirm("Play again?"));
   } finally {
     button.disabled = false;
     button.textContent = "Play Again";
@@ -136,3 +136,4 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("startBtn");
   btn.addEventListener("click", () => startGameFlow(btn));
 });
+
