@@ -1,6 +1,6 @@
 const AI_NAME = "BR4N-K0"; // evil AI
 
-// Intro popup + "Do you want to play?"
+// Intro popups (no confirm here to avoid dialog blocking)
 function showIntro() {
   alert(
     `Hello human, I’ve hacked this assignment!\n\n` +
@@ -13,12 +13,11 @@ function showIntro() {
     `Good luck, muuuuhahahahahahaha!`
   );
   alert("Tip: Press F12 (or Ctrl+Shift+I on Windows / Cmd+Opt+I on Mac) and open the Console tab to see round-by-round results.");
-  return confirm("Do you dare to face me?");
 }
 
 function capitalize(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
 
-// Validated player input with EVIL AI taunts on bad input
+// Validated player input with evil AI taunts
 function getPlayerChoice() {
   const taunts = [
     `${AI_NAME}: That input was… adorable. Try Rock, Paper, or Scissors.`,
@@ -30,37 +29,30 @@ function getPlayerChoice() {
 
   while (true) {
     const raw = prompt("Choose your weapon: Rock, Paper, or Scissors");
-    // If user hits Cancel, keep them in the loop with a playful nudge
-    if (raw === null) {
+    if (raw === null) { // Cancel pressed
       alert(`${AI_NAME}: Retreat detected. Face your destiny and choose!`);
       continue;
     }
-
     const cleaned = raw.trim().toLowerCase();
     if (["rock", "paper", "scissors"].includes(cleaned)) return cleaned;
-
     const taunt = taunts[Math.floor(Math.random() * taunts.length)];
-    alert(`${taunt}`);
+    alert(taunt);
   }
 }
 
-// Random computer choice
 function computerPlay() {
   const choices = ["Rock", "Paper", "Scissors"];
   return choices[Math.floor(Math.random() * choices.length)];
 }
 
-// One round: returns a result string (no logging here)
 function playRound(playerSelection, computerSelection) {
   const p = playerSelection.toLowerCase();
   const c = computerSelection.toLowerCase();
   if (p === c) return `Stalemate! Both selected ${p}.`;
-
   const playerWins =
     (p === "rock" && c === "scissors") ||
     (p === "paper" && c === "rock") ||
     (p === "scissors" && c === "paper");
-
   return playerWins
     ? `You win! ${capitalize(p)} conquers ${capitalize(c)}.`
     : `You lose! ${capitalize(c)} overcomes ${capitalize(p)}.`;
@@ -109,14 +101,11 @@ function game() {
   return `${finalMsg}\nFinal Score → You ${playerScore} : ${computerScore} ${AI_NAME}`;
 }
 
-// Run when the page loads: intro → game → final alert → play again?
+// Start automatically; then ask to play again
 (function run() {
-  if (showIntro()) {
-    do {
-      const finalMessage = game();
-      alert(finalMessage);                 // one final popup only
-    } while (confirm("Play again?"));      // OK = replay, Cancel = stop
-  } else {
-    alert("You have fled... The AI wins by default.");
-  }
+  showIntro();
+  do {
+    const finalMessage = game();
+    alert(finalMessage);                 // one final popup only
+  } while (confirm("Play again?"));      // OK = replay, Cancel = stop
 })();
