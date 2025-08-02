@@ -10,7 +10,6 @@ function showIntro() {
     `• 5 rounds will be played.\n` +
     `• I will try to outsmart you each time.\n` +
     `• My weaknesses are errors in the console log... not your clicks.\n\n` +
-    `• If you want to see the scoreboard, press F12 on your keyboard!.\n` +
     `Good luck, muuuuhahahahahahaha!`
   );
   return confirm("Do you dare to face me?");
@@ -104,4 +103,5 @@ function game() {
     alert("You have fled... The AI wins by default.");
   }
 })();
+
 
