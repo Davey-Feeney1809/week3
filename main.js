@@ -1,4 +1,4 @@
-const AI_NAME = "BR4N-K0"; // evil AI
+const AI_NAME = "BR4N-K0"; 
 
 
 function getLogEl() { return document.getElementById("logs"); }
@@ -33,10 +33,7 @@ function getPlayerChoice() {
 
   while (true) {
     const raw = prompt("Choose your weapon: Rock, Paper, or Scissors");
-    if (raw === null) { 
-      alert(`${AI_NAME}: Retreat detected. Face your destiny and choose!`);
-      continue;
-    }
+    if (raw === null) { alert(`${AI_NAME}: Retreat detected. Face your destiny and choose!`); continue; }
     const cleaned = raw.trim().toLowerCase();
     if (["rock", "paper", "scissors"].includes(cleaned)) return cleaned;
     alert(taunts[Math.floor(Math.random() * taunts.length)]);
@@ -90,7 +87,7 @@ function game() {
     log(`Score → You ${playerScore} : ${computerScore} ${AI_NAME}`);
     log("------------------------------\n");
 
-  
+    
     alert(
       `Round ${round}\n` +
       `You: ${capitalize(playerSelection)} | ${AI_NAME}: ${computerSelection}\n` +
@@ -99,33 +96,39 @@ function game() {
     );
   }
 
-  let finalMsg = "";
+  
+  let finalLines = "";
   if (playerScore > computerScore) {
     log(`Impossible... You defeated ${AI_NAME}.`);
     log("Your logic is... acceptable. I shall retreat—for now.");
-    finalMsg = `Victory! You defeated ${AI_NAME}.`;
+    finalLines = `Impossible... You defeated ${AI_NAME}.\nYour logic is... acceptable. I shall retreat—for now.`;
   } else if (playerScore < computerScore) {
     log(`${AI_NAME}: Victory achieved. Humanity downgraded.`);
     log("Return with better algorithms, human.");
-    finalMsg = `${AI_NAME} prevails. Better luck next time.`;
+    finalLines = `${AI_NAME}: Victory achieved. Humanity downgraded.\nReturn with better algorithms, human.`;
   } else {
     log("A draw. Intriguing. We are evenly matched—for now.");
-    finalMsg = "It's a draw.";
+    finalLines = "A draw. Intriguing. We are evenly matched—for now.";
   }
 
-  return `${finalMsg}\nFinal Score → You ${playerScore} : ${computerScore} ${AI_NAME}`;
+  const scoreLine = `Final Score → You ${playerScore} : ${computerScore} ${AI_NAME}`;
+  return {
+    finalText: `${finalLines}\n${scoreLine}`,
+    confirmText: `${finalLines}\n${scoreLine}\n\nPlay again?`
+  };
 }
 
-
+// ---------- Start on user click (Opera/Brave friendly) ----------
 function startGameFlow(button) {
   button.disabled = true;
   button.textContent = "Game in progress…";
   try {
-    showIntro(); 
+    showIntro(); // intro + console tip
     do {
-      const finalMessage = game();
-      alert(finalMessage); // final popup
-    } while (confirm("Play again?"));
+      const { finalText, confirmText } = game();
+      alert(finalText);                 
+      if (!confirm(confirmText)) break; 
+    } while (true);
   } finally {
     button.disabled = false;
     button.textContent = "Play Again";
@@ -136,4 +139,3 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("startBtn");
   btn.addEventListener("click", () => startGameFlow(btn));
 });
-
