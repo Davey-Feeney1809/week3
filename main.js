@@ -1,6 +1,6 @@
 const AI_NAME = "BR4N-K0"; // evil AI
 
-// ---------- Logging helpers ----------
+// ---------- Simple on-page + console logging (user friendly) ----------
 function getLogEl() {
   let el = document.getElementById("logs");
   if (!el) {
@@ -13,7 +13,9 @@ function getLogEl() {
 function logToPage(msg) { getLogEl().textContent += msg + "\n"; }
 function log(msg) { console.log(msg); logToPage(msg); }
 
-// ---------- Intro ----------
+function capitalize(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
+
+// ---------- Opening message (includes tip for console) ----------
 function showIntro() {
   alert(
     `Hello human, I’ve hacked this assignment!\n\n` +
@@ -21,19 +23,13 @@ function showIntro() {
     `You can only stop me with clean coding and good logic!\n\n` +
     `Rules:\n` +
     `• 5 rounds will be played.\n` +
-    `• I will try to outsmart you each time.\n` +
-    `• My weaknesses are errors in the console log... not your clicks.\n\n` +
-    `Tip: Press F12 (or Ctrl+Shift+I on Windows / Cmd+Opt+I on Mac) and open the Console tab to see round-by-round results.\n\n` +
+    `• I will try to outsmart you each time.\n\n` +
+    `Tip: Press F12 (or Ctrl+Shift+I on Windows / Cmd+Opt+I on Mac), then open the Console tab to see round-by-round details.\n\n` +
     `Good luck, muuuuhahahahahahaha!`
   );
 }
-function ensureConsoleOpen() {
-  alert("Open the Console now (F12 → Console tab), then click OK to begin Round 1.");
-}
 
-function capitalize(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
-
-// ---------- Input (with taunts on invalid) ----------
+// ---------- Input (with friendly but funny taunts on invalid) ----------
 function getPlayerChoice() {
   const taunts = [
     `${AI_NAME}: That input was… adorable. Try Rock, Paper, or Scissors.`,
@@ -42,20 +38,25 @@ function getPlayerChoice() {
     `${AI_NAME}: I can predict everything except *that*. Use Rock, Paper, or Scissors.`,
     `${AI_NAME}: Error 418: Not a valid weapon. Rock, Paper, or Scissors only.`
   ];
+
   while (true) {
     const raw = prompt("Choose your weapon: Rock, Paper, or Scissors");
-    if (raw === null) { alert(`${AI_NAME}: Retreat detected. Face your destiny and choose!`); continue; }
+    if (raw === null) { // user pressed Cancel
+      alert(`${AI_NAME}: Retreat detected. Face your destiny and choose!`);
+      continue;
+    }
     const cleaned = raw.trim().toLowerCase();
     if (["rock", "paper", "scissors"].includes(cleaned)) return cleaned;
     alert(taunts[Math.floor(Math.random() * taunts.length)]);
   }
 }
 
-// ---------- Game logic ----------
+// ---------- Core game helpers ----------
 function computerPlay() {
   const choices = ["Rock", "Paper", "Scissors"];
   return choices[Math.floor(Math.random() * choices.length)];
 }
+
 function playRound(playerSelection, computerSelection) {
   const p = playerSelection.toLowerCase();
   const c = computerSelection.toLowerCase();
@@ -69,7 +70,7 @@ function playRound(playerSelection, computerSelection) {
     : `You lose! ${capitalize(c)} overcomes ${capitalize(p)}.`;
 }
 
-// Plays one 5-round match and returns the final message
+// ---------- One 5-round match; returns final message ----------
 function game() {
   console.clear();
   getLogEl().textContent = "";
@@ -79,14 +80,13 @@ function game() {
   log(`Domination protocol: ROCK • PAPER • SCISSORS (5 rounds).`);
   log(`============================\n`);
 
-  ensureConsoleOpen();
-
   let playerScore = 0, computerScore = 0;
 
   for (let round = 1; round <= 5; round++) {
     log(`—— Round ${round} ——`);
-    const playerSelection = getPlayerChoice();
-    const computerSelection = computerPlay();
+
+    const playerSelection = getPlayerChoice();        // user input
+    const computerSelection = computerPlay();         // AI input
     const result = playRound(playerSelection, computerSelection);
 
     log(`You: ${capitalize(playerSelection)} | ${AI_NAME}: ${computerSelection}`);
@@ -98,7 +98,7 @@ function game() {
     log(`Score → You ${playerScore} : ${computerScore} ${AI_NAME}`);
     log("------------------------------\n");
 
-    // NEW: per-round popup with running score
+    // Per-round popup (after the input) with AI choice + current score
     alert(
       `Round ${round}\n` +
       `You: ${capitalize(playerSelection)} | ${AI_NAME}: ${computerSelection}\n` +
@@ -120,16 +120,17 @@ function game() {
     log("A draw. Intriguing. We are evenly matched—for now.");
     finalMsg = "It's a draw.";
   }
+
   return `${finalMsg}\nFinal Score → You ${playerScore} : ${computerScore} ${AI_NAME}`;
 }
 
-// ---------- Start after load ----------
+// ---------- Start after load (Brave-friendly) ----------
 window.addEventListener("load", () => {
-  showIntro();
-  setTimeout(() => {
+  showIntro();                  // single intro alert with the console tip
+  setTimeout(() => {            // tiny delay so dialogs don't clash at load
     do {
       const finalMessage = game();
-      alert(finalMessage);             // final popup
-    } while (confirm("Play again?"));  // OK = replay, Cancel = stop
+      alert(finalMessage);      // final popup
+    } while (confirm("Play again?")); // OK = replay, Cancel = stop
   }, 50);
 });
